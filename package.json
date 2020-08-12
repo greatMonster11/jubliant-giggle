@@ -1,0 +1,19 @@
+{
+  "name": "design-partterns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "codestyle:check": "tslint -c tslint.json -p tsconfig.json",
+    "codestyle:fix": "tslint -c tslint.json -p tsconfig.json --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tsc-node": "0.0.3",
+    "tslint": "^6.1.3",
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^3.9.7"
+  }
+}
