@@ -1,76 +1,106 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Dialog = /** @class */ (function () {
-    function Dialog() {
+/**
+ * Concrete Factories produce a family of products that belong to a single
+ * variant. The factory guarantees that resulting products are compatible. Note
+ * that signatures of the Concrete Factory's methods return an abstract product,
+ * while inside the method a concrete product is instantiated.
+ */
+var ConcreteFactory1 = /** @class */ (function () {
+    function ConcreteFactory1() {
     }
-    Dialog.prototype.render = function () {
-        // Call the method to create a button
-        var okButton = this.createButton(); // use the button
-        okButton.onClick();
-        okButton.render();
-        return "Dialog: sussess render the button as well";
+    ConcreteFactory1.prototype.createProductA = function () {
+        return new ConcreteProductA1();
     };
-    return Dialog;
+    ConcreteFactory1.prototype.createProductB = function () {
+        return new ConcreteProductB1();
+    };
+    return ConcreteFactory1;
 }());
-var WindowDialog = /** @class */ (function (_super) {
-    __extends(WindowDialog, _super);
-    function WindowDialog() {
-        return _super !== null && _super.apply(this, arguments) || this;
+/**
+ * Each Concrete Factory has a corresponding product variant.
+ */
+var ConcreteFactory2 = /** @class */ (function () {
+    function ConcreteFactory2() {
     }
-    WindowDialog.prototype.createButton = function () {
-        return new WindowButton();
+    ConcreteFactory2.prototype.createProductA = function () {
+        return new ConcreteProductA2();
     };
-    return WindowDialog;
-}(Dialog));
-var WebDialog = /** @class */ (function (_super) {
-    __extends(WebDialog, _super);
-    function WebDialog() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    WebDialog.prototype.createButton = function () {
-        return new HTMLButton();
+    ConcreteFactory2.prototype.createProductB = function () {
+        return new ConcreteProductB2();
     };
-    return WebDialog;
-}(Dialog));
-var HTMLButton = /** @class */ (function () {
-    function HTMLButton() {
-    }
-    HTMLButton.prototype.onClick = function () { };
-    HTMLButton.prototype.render = function () {
-        return "Result of HTMLButton impletments";
-    };
-    return HTMLButton;
+    return ConcreteFactory2;
 }());
-var WindowButton = /** @class */ (function () {
-    function WindowButton() {
+/**
+ * These Concrete Products are created by corresponding Concrete Factories.
+ */
+var ConcreteProductA1 = /** @class */ (function () {
+    function ConcreteProductA1() {
     }
-    WindowButton.prototype.onClick = function () { };
-    WindowButton.prototype.render = function () {
-        return "Result of WindowButton implements";
+    ConcreteProductA1.prototype.usefulFunctionA = function () {
+        return "The result of the product A1.";
     };
-    return WindowButton;
+    return ConcreteProductA1;
 }());
-// The implement works with an instancee of a button actions
-function clientCode(dialog) {
-    console.log("Button: `I'm not aware of the dialog's class, but is still works.");
-    console.log(dialog.render());
+var ConcreteProductA2 = /** @class */ (function () {
+    function ConcreteProductA2() {
+    }
+    ConcreteProductA2.prototype.usefulFunctionA = function () {
+        return "The result of the product A2.";
+    };
+    return ConcreteProductA2;
+}());
+/**
+ * These Concrete Products are created by corresponding Concrete Factories.
+ */
+var ConcreteProductB1 = /** @class */ (function () {
+    function ConcreteProductB1() {
+    }
+    ConcreteProductB1.prototype.usefulFunctionB = function () {
+        return "The result of the product B1.";
+    };
+    /**
+     * The variant, Product B1, is only able to work correctly with the variant,
+     * Product A1. Nevertheless, it accepts any instance of AbstractProductA as
+     * an argument.
+     */
+    ConcreteProductB1.prototype.anotherUsefulFunctionB = function (collaborator) {
+        var result = collaborator.usefulFunctionA();
+        return "The result of the B1 collaborating with the (" + result + ")";
+    };
+    return ConcreteProductB1;
+}());
+var ConcreteProductB2 = /** @class */ (function () {
+    function ConcreteProductB2() {
+    }
+    ConcreteProductB2.prototype.usefulFunctionB = function () {
+        return "The result of the product B2.";
+    };
+    /**
+     * The variant, Product B2, is only able to work correctly with the variant,
+     * Product A2. Nevertheless, it accepts any instance of AbstractProductA as
+     * an argument.
+     */
+    ConcreteProductB2.prototype.anotherUsefulFunctionB = function (collaborator) {
+        var result = collaborator.usefulFunctionA();
+        return "The result of the B2 collaborating with the (" + result + ")";
+    };
+    return ConcreteProductB2;
+}());
+/**
+ * The client code works with factories and products only through abstract
+ * types: AbstractFactory and AbstractProduct. This lets you pass any factory or
+ * product subclass to the client code without breaking it.
+ */
+function clientCode(factory) {
+    var productA = factory.createProductA();
+    var productB = factory.createProductB();
+    console.log(productB.usefulFunctionB());
+    console.log(productB.anotherUsefulFunctionB(productA));
 }
-// The application picks a dialogs's type depending on the configuration
-// or enviroment
-console.log("App: Launched with the WindowDialog");
-clientCode(new WindowDialog());
+/**
+ * The client code can work with any concrete factory class.
+ */
+console.log("Client: Testing client code with the first factory type...");
+clientCode(new ConcreteFactory1());
 console.log("");
-console.log("App: Launched with the WebDialog");
-clientCode(new WebDialog());
-console.log("");
+console.log("Client: Testing the same client code with the second factory type...");
+clientCode(new ConcreteFactory2());
